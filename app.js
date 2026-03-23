@@ -966,7 +966,7 @@ function renderEvent(event, index) {
         ${iconMap[event.category] || iconMap.free}
       </div>
       <details class="event__card${openByDefault ? " is-open" : ""}" ${openByDefault ? "open" : ""} data-event-id="${escapeHtml(detailsId)}">
-        <summary class="event__summary" aria-controls="${escapeHtml(detailsId)}-panel">
+        <summary class="event__summary" aria-controls="${escapeHtml(detailsId)}-panel" aria-expanded="${openByDefault ? "true" : "false"}">
           <div class="event__summary-main">
             <div class="event__summary-title">
               <h3>${escapeHtml(event.title)}</h3>
@@ -1064,6 +1064,10 @@ function bindEvents() {
   document.querySelectorAll(".event__card").forEach((details) => {
     details.addEventListener("toggle", () => {
       details.classList.toggle("is-open", details.open);
+      const summary = details.querySelector("summary");
+      if (summary) {
+        summary.setAttribute("aria-expanded", details.open ? "true" : "false");
+      }
     });
   });
 }
