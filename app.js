@@ -391,7 +391,33 @@ function renderPersonalPlans(plans) {
 function renderDetails(event) {
   return `
     <div class="event__details-inner">
-      <ul>
+      <div class="event__facts">
+        <div class="event__fact">
+          <span>시간</span>
+          <strong>${escapeHtml(event.time)}</strong>
+        </div>
+        <div class="event__fact">
+          <span>장소</span>
+          <strong>${escapeHtml(event.place)}</strong>
+        </div>
+        <div class="event__fact">
+          <span>메모</span>
+          <strong>${escapeHtml(event.note)}</strong>
+        </div>
+        ${
+          event.status
+            ? `
+              <div class="event__fact">
+                <span>상태</span>
+                <strong class="event__fact-status event__fact-status--${escapeHtml(event.statusTone || "blue")}">
+                  ${escapeHtml(event.status)}
+                </strong>
+              </div>
+            `
+            : ""
+        }
+      </div>
+      <ul class="event__detail-list">
         ${(event.details || [])
           .map((detail) => `<li>${escapeHtml(detail)}</li>`)
           .join("")}
@@ -423,20 +449,16 @@ function renderEvent(event) {
               <h3>${escapeHtml(event.title)}</h3>
               <p>${escapeHtml(event.place)}</p>
             </div>
-            <div class="event__meta">
-              <span class="event__time">${escapeHtml(event.time)}</span>
-              <span class="event__chevron${isOpen ? " is-open" : ""}" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-              </span>
-            </div>
+            <span class="event__time">(${escapeHtml(event.time)})</span>
           </div>
           <div class="event__bottom">
             <span class="event__note">${escapeHtml(event.note)}</span>
-            ${
-              event.status
-                ? `<span class="event__status event__status--${escapeHtml(event.statusTone || "blue")}">${escapeHtml(event.status)}</span>`
-                : ""
-            }
+            <span class="event__action${isOpen ? " is-open" : ""}">
+              <span>${isOpen ? "Close" : "View details"}</span>
+              <span class="event__chevron${isOpen ? " is-open" : ""}" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+              </span>
+            </span>
           </div>
         </button>
         <div
@@ -455,12 +477,7 @@ function renderActiveDay() {
   const day = tripData.days.find((item) => item.id === state.activeDayId) || tripData.days[0];
 
   return `
-    <section class="day-panel" aria-labelledby="${escapeHtml(day.id)}-title">
-      <header class="day-header">
-        <span class="day-header__eyebrow">${escapeHtml(day.badge)}</span>
-        <h1 id="${escapeHtml(day.id)}-title">${escapeHtml(day.title)}</h1>
-        <p class="day-header__caption">${escapeHtml(day.caption)}</p>
-      </header>
+    <section class="day-panel" aria-label="${escapeHtml(day.title)}">
       <div class="timeline">
         ${day.events.map((event) => renderEvent(event)).join("")}
       </div>
@@ -493,14 +510,25 @@ function renderApp(options = {}) {
 
   bindEvents();
 
-  if (typeof options.timelineScrollTop === "number") {
-    requestAnimationFrame(() => {
-      const timeline = document.querySelector(".timeline");
-      if (timeline) {
-        timeline.scrollTop = options.timelineScrollTop;
-      }
-    });
-  }
+  requestAnimationFrame(() => {
+    const timeline = document.querySelector(".timeline");
+
+    if (timeline && typeof options.timelineScrollTop === "number") {
+      timeline.scrollTop = options.timelineScrollTop;
+    }
+
+    if (options.scrollToEventId) {
+      requestAnimationFrame(() => {
+        const target = document.querySelector(
+          `[data-event-id="${options.scrollToEventId}"]`,
+        );
+
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      });
+    }
+  });
 }
 
 function bindEvents() {
@@ -519,7 +547,10 @@ function bindEvents() {
       const clickedEventId = button.dataset.eventId;
 
       state.openEventId = state.openEventId === clickedEventId ? null : clickedEventId;
-      renderApp({ timelineScrollTop });
+      renderApp({
+        timelineScrollTop,
+        scrollToEventId: state.openEventId,
+      });
     });
   });
 }
