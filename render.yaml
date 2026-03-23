@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: taipei-together
+    plan: free
+    runtime: static
+    buildCommand: npm run build
+    staticPublishPath: ./dist
