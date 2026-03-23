@@ -1,5 +1,4 @@
 const tripData = {
-  title: "Trip Itinerary",
   days: [
     {
       id: "day-1",
@@ -489,7 +488,7 @@ function renderApp(options = {}) {
   const app = document.getElementById("app");
 
   app.innerHTML = `
-    <section class="device">
+    <section class="itinerary">
       <div class="day-tabs" role="tablist" aria-label="날짜 선택">
         ${renderTabs()}
       </div>
