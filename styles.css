@@ -60,49 +60,14 @@ button {
   flex-direction: column;
 }
 
-.topbar {
-  display: grid;
-  grid-template-columns: 32px 1fr 32px;
-  align-items: center;
-  gap: 8px;
-}
-
-.topbar__icon {
-  width: 32px;
-  height: 32px;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  border: 0;
-  background: transparent;
-  color: var(--text-strong);
-}
-
-.topbar__icon svg {
-  width: 22px;
-  height: 22px;
-  fill: currentColor;
-}
-
-.topbar h2,
 .day-tab strong,
-.day-header h1,
 .event__copy h3,
 .event__time {
   font-family: "Outfit", sans-serif;
 }
 
-.topbar h2 {
-  margin: 0;
-  text-align: center;
-  font-size: 1.35rem;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--text-strong);
-}
-
 .day-tabs {
-  margin-top: 8px;
+  margin-top: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -485,19 +450,6 @@ button {
     height: calc(100vh - 20px);
     padding: 12px;
     border-radius: 32px;
-  }
-
-  .topbar {
-    grid-template-columns: 36px 1fr 36px;
-  }
-
-  .topbar__icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .topbar h2 {
-    font-size: 1.2rem;
   }
 
   .day-tab {

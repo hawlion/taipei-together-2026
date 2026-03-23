@@ -490,16 +490,6 @@ function renderApp(options = {}) {
 
   app.innerHTML = `
     <section class="device">
-      <div class="topbar">
-        <span class="topbar__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M14.7 5.3 8 12l6.7 6.7-1.4 1.4L5.2 12l8.1-8.1z"/></svg>
-        </span>
-        <h2>${escapeHtml(tripData.title)}</h2>
-        <span class="topbar__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 5.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3m0 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3m0 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3"/></svg>
-        </span>
-      </div>
-
       <div class="day-tabs" role="tablist" aria-label="날짜 선택">
         ${renderTabs()}
       </div>
